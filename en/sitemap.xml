@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+
+
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  
+    
+    
+  
+
+  
+  
+    <url>
+      <loc>https://docs.netapp.com/en/kubernetes-service/a-sysdig-kubernetes-adventure.html</loc>
+      
+        <lastmod>2019-01-18T20:22:55+00:00</lastmod>
+      
+    </url>
+  
+    <url>
+      <loc>https://docs.netapp.com/en/kubernetes-service/create-auth-credentials-on-aws.html</loc>
+      
+        <lastmod>2019-01-23T19:01:56+00:00</lastmod>
+      
+    </url>
+  
+    <url>
+      <loc>https://docs.netapp.com/en/kubernetes-service/create-auth-credentials-on-azure.html</loc>
+      
+        <lastmod>2019-01-23T19:01:56+00:00</lastmod>
+      
+    </url>
+  
+    <url>
+      <loc>https://docs.netapp.com/en/kubernetes-service/create-auth-credentials-on-aws.html</loc>
+      
+        <lastmod>2019-01-18T20:22:55+00:00</lastmod>
+      
+    </url>
+  
+    <url>
+      <loc>https://docs.netapp.com/en/kubernetes-service/create-auth-credentials-on-aws.html</loc>
+      
+        <lastmod>2019-01-18T20:22:55+00:00</lastmod>
+      
+    </url>
+  
+    <url>
+      <loc>https://docs.netapp.com/en/kubernetes-service/create-auth-credentials-on-gce.html</loc>
+      
+        <lastmod>2019-01-23T19:01:56+00:00</lastmod>
+      
+    </url>
+  
+    <url>
+      <loc>https://docs.netapp.com/en/kubernetes-service/create-auth-credentials-on-gke.html</loc>
+      
+        <lastmod>2019-01-23T19:01:56+00:00</lastmod>
+      
+    </url>
+  
+    <url>
+      <loc>https://docs.netapp.com/en/kubernetes-service/</loc>
+      
+        <lastmod>2019-01-18T20:22:55+00:00</lastmod>
+      
+    </url>
+  
+    <url>
+      <loc>https://docs.netapp.com/en/kubernetes-service/install-kubectl-to-control-a-kubernetes-cluster.html</loc>
+      
+        <lastmod>2019-01-18T20:22:55+00:00</lastmod>
+      
+    </url>
+  
+    <url>
+      <loc>https://docs.netapp.com/en/kubernetes-service/managing-ingresses-on-kubernetes.html</loc>
+      
+        <lastmod>2019-01-18T20:22:55+00:00</lastmod>
+      
+    </url>
+  
+    <url>
+      <loc>https://docs.netapp.com/en/kubernetes-service//search.html</loc>
+      
+        <lastmod>2019-01-24T16:01:32+00:00</lastmod>
+      
+    </url>
+  
+    <url>
+      <loc>https://docs.netapp.com/en/kubernetes-service/upgrade-to-the-newest-version-of-kubernetes.html</loc>
+      
+        <lastmod>2019-01-18T20:22:55+00:00</lastmod>
+      
+    </url>
+  
+    <url>
+      <loc>https://docs.netapp.com/en/kubernetes-service/using-the-kubernetes-cloud-backup.html</loc>
+      
+        <lastmod>2019-01-18T20:22:55+00:00</lastmod>
+      
+    </url>
+  
+    <url>
+      <loc>https://docs.netapp.com/en/kubernetes-service/</loc>
+      
+        <lastmod>2019-01-18T20:22:55+00:00</lastmod>
+      
+    </url>
+  
+    <url>
+      <loc>https://docs.netapp.com/en/kubernetes-service/</loc>
+      
+        <lastmod>2019-01-18T20:22:55+00:00</lastmod>
+      
+    </url>
+  
+    <url>
+      <loc>https://docs.netapp.com/en/kubernetes-service//assets/</loc>
+      
+        <lastmod>2019-01-18T20:22:55+00:00</lastmod>
+      
+    </url>
+  
+    <url>
+      <loc>https://docs.netapp.com/en/kubernetes-service//assets/documentation/</loc>
+      
+        <lastmod>2019-01-18T20:22:55+00:00</lastmod>
+      
+    </url>
+  
+    <url>
+      <loc>https://docs.netapp.com/en/kubernetes-service//documentation/</loc>
+      
+        <lastmod>2019-01-18T20:22:55+00:00</lastmod>
+      
+    </url>
+  
+
+  
+  
+</urlset>
