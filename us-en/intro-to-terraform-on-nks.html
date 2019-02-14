@@ -2,7 +2,7 @@
 <!--[if IE 9]>         <html class="ie9"> <![endif]-->
 <!--[if gt IE 9]><!--> <html>         <!--<![endif]-->
   <head>
-  <title>Using the Kubernetes Cloud Backup | NetApp Cloud Docs</title>
+  <title>Intro to Terraform on NKS | NetApp Cloud Docs</title>
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,7 +14,7 @@
 
   
 
-  <meta name="description" content="Learn how to install Kubernetes Cloud Backup, and how to restore a Kubernetes cluster from backup.">
+  <meta name="description" content="Learn the basics of Terraform, and how to use it to build and manage Kubernetes infrastructure through NKS.">
   <meta name="keywords" content=" ">
 
   <!-- Icons -->
@@ -306,7 +306,7 @@
   
 
   
-    <li><a href="intro-to-terraform-on-nks.html">Terraform on NKS</a></li>
+    <li class="active"><a href="intro-to-terraform-on-nks.html">Terraform on NKS</a></li>
   
 
   
@@ -314,7 +314,7 @@
   
 
   
-    <li class="active"><a href="using-the-kubernetes-cloud-backup.html">Using the Kubernetes Cloud Backup</a></li>
+    <li><a href="using-the-kubernetes-cloud-backup.html">Using the Kubernetes Cloud Backup</a></li>
   
 
   
@@ -336,127 +336,456 @@
           
 
 <div class="n-doc__component-detail-heading-wrap">
-  <h1 class="n-doc__component-detail-heading">Using the Kubernetes Cloud Backup
+  <h1 class="n-doc__component-detail-heading">Intro to Terraform on NKS
     <span>
       
-        <a target="_blank" href="https://github.com/NetAppDocs/kubernetes-service/blob/master/using-the-kubernetes-cloud-backup.adoc" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit on GitHub</a>
-        <a target="_blank" href="https://github.com/NetAppDocs/kubernetes-service/issues/new?body=Page%3A%20[Using the Kubernetes Cloud Backup](https://docs.netapp.com/us-en/kubernetes-service/using-the-kubernetes-cloud-backup.html)" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Request doc changes</a>
+        <a target="_blank" href="https://github.com/NetAppDocs/kubernetes-service/blob/master/terraform-with-nks.adoc" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit on GitHub</a>
+        <a target="_blank" href="https://github.com/NetAppDocs/kubernetes-service/issues/new?body=Page%3A%20[Intro to Terraform on NKS](https://docs.netapp.com/us-en/kubernetes-service/intro-to-terraform-on-nks.html)" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Request doc changes</a>
       
     </span>
   </h1>
 </div>
 
 
-<p class="page-details">Updated <time datetime="2019-01-18 20:22:55 +0000">01/18/2019</time></p>
+<p class="page-details">Updated <time datetime="2019-02-14 17:32:14 +0000">02/14/2019</time></p>
 
 
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Learn the basics of Terraform, and how to use it to build and manage Kubernetes infrastructure through NKS. HashiCorp Terraform is an open source tool which is designed to help you create and maintain a consistent, reproducible infrastructure.</p>
+</div>
+</div>
+</div>
 <div class="sect1">
-<h2 id="contents">Contents</h2>
+<h2 id="table-of-contents">Table of Contents</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p><a href="#introduction">Introduction</a></p>
+<p><a href="#requirements">Requirements</a></p>
 </li>
 <li>
-<p><a href="#install-the-kubernetes-cloud-backup">Install the Kubernetes Cloud Backup</a></p>
+<p><a href="#add-ssh-keys-to-your-nks-account">Add SSH Keys to your NKS Account</a></p>
 </li>
 <li>
-<p><a href="#restore-a-kubernetes-cluster-from-backup">Restore a Kubernetes Cluster from Backup</a></p>
+<p><a href="#install-the-nks-provider">Install the NKS Provider</a></p>
+</li>
+<li>
+<p><a href="#example-launch-an-aws-cluster">Example: Launch an AWS Cluster</a></p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="introduction">Introduction</h2>
+<h2 id="requirements">Requirements</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Kubernetes Cloud Backup can be used to backup and restore your Kubernetes state information.  This includes deployments, services, Helm release, et cetera. This tutorial covers how to install Kubernetes Cloud Backup, and how to restore a Kubernetes cluster from backup.</p>
-</div>
 <div class="ulist">
 <ul>
 <li>
-<p>The Kubernetes state cloud backup script is designed to be run as a cron job.</p>
+<p>Terraform installed on your system. The easiest way to install Terraform is to <a href="https://www.terraform.io/downloads.html">download the binary</a>, uncompress the file, and put it in <code>/usr/local/bin</code>.</p>
 </li>
 <li>
-<p>Each backup has a <code>restore_state.sh</code> script, which will restore the entire cluster&#8217;s state when run.</p>
+<p>A working knowledge of Terraform basics.</p>
+</li>
+<li>
+<p>An NKS account.</p>
+</li>
+<li>
+<p>At least one provider account (AWS, GKE, etc.)</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="install-the-kubernetes-cloud-backup">Install the Kubernetes Cloud Backup</h2>
+<h2 id="add-ssh-keys-to-your-nks-account">Add SSH Keys to your NKS Account</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To set up the backup solution for the cluster, use the Helm chart and deploy it to Kubernetes as a cron job. This will ensure cluster backups of Kubernetes resource definitions to your AWS S3 or GCS bucket.</p>
+<p>The SSH keys are used to securely log in to your nodes. To add SSH keys to your NKS account:</p>
 </div>
-<div class="sect2">
-<h3 id="aws-s3">AWS S3</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>    bash
-    helm upgrade --install kube-backup kube-state-backup --namespace kube-backup \
-        --set schedule="*/50 * * * *",aws.enabled="true" \
-        --set  aws.accessKeyId="UNF37N93MG374B27",aws.secretAccessKey="AvgjbYndf9TMF8Y3F3J993TMTJ2309T" \
-        --set aws.bucket="my-kube-state-backup-bucket",aws.region="eu-west-2"</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="gcs">GCS</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>    bash
-    helm upgrade --install kube-backup kube-state-backup --namespace kube-backup \
-        --set schedule="*/50 * * * *",gcs.enabled="true",gcs.projectId="project-123" \
-        --set gcs.serviceAccountKey="$(cat sa.json | base64)" \
-        --set gcs.bucket="my-kube-state-backup",gcs.region="eu"</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="azure">Azure</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>    bash
-    helm upgrade --install spc-kube-backup spc-state-backup --namespace stackpoint-system \
-        --set schedule="*/50 * * * *",azure.enabled="true",storageAccount="azure_storage_account" \
-        --set azure.storageAccessKey="AFSDJJDUEIEOOEOEOOEOEO" \
-        --set azure.storageContainer="my-kube-state-backup-container" \
-        --set jobCleanup.enabled="true" # set it only for k8s v1.5</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="update-the-cron-job">Update the Cron Job</h3>
-<div class="paragraph">
-<p>You can also use the <code>helm upgrade</code> command to update the cron job. For example, to change the schedule:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>    bash
-    helm upgrade kube-backup kube-state-backup --reuse-values --set schedule="*/30 * * * *"</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>To change the Docker image:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>    bash
-    helm upgrade kube-backup kube-state-backup --reuse-values --set imageTag="0.1.8"</code></pre>
-</div>
-</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Log in at <a href="https://stackpoint.io">Stackpoint.io</a>.</p>
+</li>
+<li>
+<p>Go to <strong>Organization</strong> &gt; <strong>Setup</strong>.</p>
+</li>
+<li>
+<p>In the <strong>SSH Keys</strong> section, click <strong>ADD SSH KEY</strong>.</p>
+</li>
+<li>
+<p>Paste the contents of your public key file into the <strong>Key</strong> field.</p>
+</li>
+<li>
+<p>Click <strong>Create</strong>.</p>
+</li>
+</ol>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="restore-a-kubernetes-cluster-from-backup">Restore a Kubernetes Cluster from Backup</h2>
+<h2 id="get-an-nks-api-token">Get an NKS API Token</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To restore from backup, download the backup archive from your cloud storage, extract files and run the <code>restore_state.sh</code> shell script on the freshly-created cluster. This will restore your cluster. Note: kubectl must be present and set to access your Kubernetes cluster.</p>
+<p>The API token is used to authenticate with the NKS API. To obtain a token:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Log in at <a href="https://stackpoint.io">Stackpoint.io</a>.</p>
+</li>
+<li>
+<p>Click your profile avatar in the top right corner and select <code>Edit Profile</code>.</p>
+</li>
+<li>
+<p>In the <strong>API Tokens</strong> section, click <strong>Add Token</strong>.</p>
+</li>
+<li>
+<p>Copy the token and save it somewhere safe. This is your only chance to view your API token. The token cannot be displayed after you leave or reload the page.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The API only accepts keys from accounts which have the role of <code>Owner</code> in the related Organization.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="install-the-nks-provider">Install the NKS Provider</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In order to use Terraform with NKS, you will need to install our Terraform provider plug-in.</p>
+</div>
+<div class="paragraph">
+<p>Download the version for your operating system from <a href="https://github.com/NetApp/terraform-provider-nks/releases">our provider plug-in GitHub repository</a>. Uncompress the file, and move it to the user plug-ins directory:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Windows:</strong>	<code>%APPDATA%\terraform.d\plugins</code></p>
+</li>
+<li>
+<p><strong>All other operating systems:</strong> <code>~/.terraform.d/plugins</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The NKS provider plug-in will be added to your Terraform installation&#8217;s list of available providers the next time you run <code>terraform init</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="example-launch-an-aws-cluster">Example: Launch an AWS Cluster</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We use AWS as an example throughout this tutorial. However, Terraform can be used with any of the providers which NKS supports. Although some of the details will vary between providers, the basics are the same.</p>
+</div>
+<div class="paragraph">
+<p>We have created <a href="https://github.com/NetApp/terraform-provider-nks/tree/development/examples">a library of example code you can use in your Terraform projects</a>. For this example, we will use <a href="https://github.com/NetApp/terraform-provider-nks/tree/development/examples/aws">these examples for creating an AWS cluster</a>.</p>
+</div>
+<div class="paragraph">
+<p>To begin, create a directory for your Terraform project. Note: Terraform will load any <code>.tf</code> file it finds in this directory.</p>
+</div>
+<div class="paragraph">
+<p>Create a file called <code>main.tf</code> in the Terraform project directory. Put the following content into this file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>provider "nks" {
+    # Set environment variable NKS_API_TOKEN with your API token from NKS
+    # Set environment variable NKS_API_URL with API endpoint,
+    # defaults to NKS production enviroment.
+}
+
+# Organization
+data "nks_organization" "default" {
+    name = "${var.organization_name}"
+}
+
+# Keyset
+data "nks_keyset" "keyset_aws" {
+  # You can specify a custom orgID here or the system will find and use your
+  # default organization ID.
+  org_id = "${data.nks_organization.default.id}"
+  name     = "${var.provider_keyset_name}"
+  category = "provider"
+  entity   = "${var.provider_code}"
+}
+
+data "nks_keyset" "keyset_ssh" {
+  # You can specify a custom orgID here or the system will find and use your
+  # default organization ID.
+  org_id = "${data.nks_organization.default.id}"
+  category = "user_ssh"
+  name     = "${var.ssh_keyset_name}"
+}
+
+# Instance specs
+data "nks_instance_specs" "master-specs" {
+    provider_code = "${var.provider_code}"
+    node_size     = "${var.provider_master_size}"
+}
+
+data "nks_instance_specs" "worker-specs" {
+    provider_code = "${var.provider_code}"
+    node_size     = "${var.provider_worker_size}"
+}
+
+# Cluster
+resource "nks_cluster" "terraform-cluster" {
+    org_id                = "${data.nks_organization.default.id}"
+    cluster_name          = "${var.cluster_name}"
+    provider_code         = "${var.provider_code}"
+    provider_keyset       = "${data.nks_keyset.keyset_aws.id}"
+    region                = "${var.provider_region}"
+    k8s_version           = "${var.provider_k8s_version}"
+    startup_master_size   = "${data.nks_instance_specs.master-specs.node_size}"
+    startup_worker_count  = 2
+    startup_worker_size   = "${data.nks_instance_specs.worker-specs.node_size}"
+    zone                  = "${var.provider_zone}"
+    provider_network_cidr = "${var.provider_network_cidr}"
+    provider_subnet_cidr  = "${var.provider_subnet_cidr}"
+    rbac_enabled          = true
+    dashboard_enabled     = true
+    etcd_type             = "${var.provider_etcd_type}"
+    platform              = "${var.provider_platform}"
+    channel               = "${var.provider_channel}"
+    ssh_keyset            = "${data.nks_keyset.keyset_ssh.id}"
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Save and exit the file.</p>
+</div>
+<div class="paragraph">
+<p>This configuration file will reference variables that you set in the next file we create. Create <code>variables.tf</code> and put the following content into the file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># Organization
+variable "organization_name" {
+  description = "NKS organization name"
+  default     = ""
+}
+
+# Cluster
+variable "cluster_name" {
+  description = "NKS cluster name"
+  default     = ""
+}
+
+# Keyset
+variable "ssh_keyset_name" {
+  description = "NKS ssh keyset name"
+  default     = ""
+}
+
+variable "provider_keyset_name" {
+  description = "Cloud provider keyset name"
+  default     = ""
+}
+
+# Cloud provider configuration variables
+variable "provider_category" {
+  description = "NKS provider category"
+  default     = ""
+}
+
+variable "provider_entity" {
+  description = "NKS ssh keyset name"
+  default     = ""
+}
+
+variable "provider_code" {
+  description = "Cloud provider type code"
+  default     = ""
+}
+
+variable "provider_k8s_version" {
+  description = "Cloud provider kubernetes version"
+  default     = ""
+}
+
+variable "provider_etcd_type" {
+  description = "Cloud provider etcd type"
+  default     = ""
+}
+
+variable "provider_channel" {
+  description = "Cloud provider channel"
+  default     = ""
+}
+
+variable "provider_platform" {
+  description = "Cloud provider platform type"
+  default     = ""
+}
+
+variable "provider_region" {
+  description = "Cloud provider region"
+  default     = ""
+}
+
+variable "provider_zone" {
+  description = "Cloud provider zone"
+  default     = ""
+}
+
+variable "provider_network_id" {
+  description = "Cloud provider network ID"
+  default     = ""
+}
+
+variable "provider_network_cidr" {
+  description = "Cloud provider network CIDR"
+  default     = ""
+}
+
+variable "provider_subnet_id" {
+  description = "Cloud provider subnet ID"
+  default     = ""
+}
+
+variable "provider_subnet_cidr" {
+  description = "Cloud provider subnet CIDR"
+  default     = ""
+}
+
+variable "provider_subnet_id2" {
+  description = "Cloud provider subnet ID for second master"
+  default     = ""
+}
+
+variable "provider_master_size" {
+  description = "Cloud provider master node size"
+  default     = ""
+}
+
+variable "provider_worker_size" {
+  description = "Cloud provider worker node size"
+  default     = ""
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then make <code>terraform.tfvars</code> with the following content:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># Organization
+organization_name = "My Organization"
+
+# Cluster
+cluster_name = "Terraform AWS Cluster"
+
+# Keyset
+provider_keyset_name = "My AWS Credentials"
+ssh_keyset_name = "My SSH Keyset"
+
+# Provider
+provider_code = "aws"
+provider_k8s_version = "v1.13.2"
+provider_platform = "coreos"
+provider_channel = "stable"
+provider_etcd_type = "classic"
+provider_region = "us-east-2"
+provider_zone = "us-east-2a"
+provider_network_id = "__new__"
+provider_network_cidr = "10.0.0.0/16"
+provider_subnet_id = "__new__"
+provider_subnet_cidr = "10.0.1.0/24"
+provider_zone2 = "us-east-2a"
+provider_subnet_id2 = "__new__"
+provider_subnet_cidr2 = "10.0.2.0/24"
+provider_master_size = "t2.medium"
+provider_worker_size = "t2.medium"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are three lines in this file you will need to customize:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>organization_name = "My Organization"
+provider_keyset_name = "My AWS Credentials"
+ssh_keyset_name = "My SSH Keyset"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Change these to reflect your actual Organization, provider keyset, and SSH keyset names.</p>
+</div>
+<div class="paragraph">
+<p>You can also change any of the other values to suit your needs. When you are ready to run the example, first export your NKS API token. From inside your project directory, use the command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>export NKS_API_TOKEN=[Your NKS API token]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Since we have changed the Terraform configuration files, use the command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>terraform init</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The next step is to have Terraform check the configuration files, and present you with a plan for executing the changes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>terraform plan</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command will output the details of what Terraform will do, if you approve its plan:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Refreshing Terraform state in-memory prior to plan...
+The refreshed state will be used to calculate this plan, but will not be
+persisted to local or remote state storage.
+
+data.nks_organization.default: Refreshing state...
+data.nks_instance_specs.master-specs: Refreshing state...
+data.nks_instance_specs.worker-specs: Refreshing state...
+data.nks_keyset.keyset_aws: Refreshing state...
+data.nks_keyset.keyset_ssh: Refreshing state...
+
+An execution plan has been generated and is shown below.
+Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  + nks_cluster.terraform-cluster
+      id:                      &lt;computed&gt;
+      channel:                 "stable"
+[...]
+
+Plan: 3 to add, 0 to change, 0 to destroy.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If everything looks good, execute this plan and launch your cluster with the command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>terraform apply</pre>
+</div>
 </div>
 </div>
 </div>
